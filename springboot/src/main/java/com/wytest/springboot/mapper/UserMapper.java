@@ -12,4 +12,10 @@ public interface UserMapper {
 
     User selectById(String id);
 
+    int updUser(User user);
+
+    int delUser(String id);
+
+    int insertUser(User user);
+
 }

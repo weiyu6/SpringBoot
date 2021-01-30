@@ -6,4 +6,16 @@
     <select id="selectById" resultType="com.wytest.springboot.bean.User" >
         SELECT * FROM User WHERE id=#{id}
     </select>
+
+    <update id="updUser" parameterType="com.wytest.springboot.bean.User">
+        update USER set id=#{id},name =#{name},pwd=#{pwd} where id = #{id}
+    </update>
+
+    <delete id="delUser" >
+        delete from user where id = #{id}
+    </delete>
+
+    <insert id="insertUser" parameterType="com.wytest.springboot.bean.User">
+        insert into user(id,name,pwd) values (#{id},#{name},#{pwd})
+    </insert>
 </mapper>
