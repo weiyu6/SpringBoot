@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:tx="http://www.springframework.org/schema/tx"
+       xsi:schemaLocation="
+     http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+   http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd">
+
+    <bean id="datasource" class="com.alibaba.druid.pool.DruidDataSource" init-method="init" destroy-method="close">
+        <property name="driverClassName" value="com.mysql.cj.jdbc.Driver"/>
+        <property name="url" value="${jdbc.url}"/>
+        <property name="username" value="${jdbc.username}"/>
+        <property name="password" value="${jdbc.password}"/>
+        <!-- 配置初始化大小、最小、最大 -->
+        <property name="maxActive" value="${jdbc.maxActive}" />
+        <property name="initialSize" value="${jdbc.initialSize}" />
+        <property name="minIdle" value="${jdbc.minIdle}" />
+        <!-- 获取连接等待超时的时间，单位是毫秒 -->
+        <property name="maxWait" value="${jdbc.maxWait}" />
+        <!-- 间隔多久才进行一次检测，检测需要关闭的空闲连接，单位是毫秒 -->
+        <property name="timeBetweenEvictionRunsMillis" value="${jdbc.timeBetweenEvictionRunsMillis}" />
+        <!-- 一个连接在池中最小空闲的时间，单位是毫秒 -->
+        <property name="minEvictableIdleTimeMillis" value="${jdbc.minEvictableIdleTimeMillis}" />
+        <!-- 检测连接是否可用的 SQL -->
+        <property name="validationQuery" value="SELECT 1" />
+        <!-- 是否开启空闲连接检查 -->
+        <property name="testWhileIdle" value="true" />
+        <!-- 是否在获取连接前检查连接状态 -->
+        <property name="testOnBorrow" value="false" />
+        <!-- 是否在归还连接时检查连接状态 -->
+        <property name="testOnReturn" value="false" />
+    </bean>
+
+    <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+        <property name="dataSource" ref="datasource"/>
+        <!-- 文件映射器，指定类文件 -->
+        <property name="configLocation" value="classpath:mybatis/mybatis-config.xml"/>
+        <!-- 自动扫描mapping.xml文件 -->
+        <property name="mapperLocations" value="classpath:com/wytest/springboot/mapper/*.xml"/>
+    </bean>
+
+    <!--下面两种方法，一种是自动是扫描对应的service类，一种是通过注入sqlsessionFactory的方式来获取一个SqlsessionTemplate-->
+    <!-- DAO接口所在包名，Spring会自动查找其下的类 -->
+    <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+        <property name="basePackage" value="com.wytest.springboot.mapper"/>
+        <property name="sqlSessionFactoryBeanName" value="sqlSessionFactory"/>
+    </bean>
+
+    <!-- 配置SqlSessionTemplate -->
+<!--    <bean id="sqlSessionTemplate" class="org.mybatis.spring.SqlSessionTemplate">-->
+<!--        &lt;!&ndash; 通过构造函数注入 &ndash;&gt;-->
+<!--        <constructor-arg name="sqlSessionFactory" ref="sqlSessionFactory" />-->
+<!--    </bean>-->
+</beans>

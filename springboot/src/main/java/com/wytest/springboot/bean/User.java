@@ -1,12 +1,16 @@
 package com.wytest.springboot.bean;
 
+import java.io.Serializable;
+
 /**
  * TODO
  * @author weiyu
  * @date 2021/1/26
  */
 
-public class User {
+public class User  implements Serializable {
+
+    private static final long serialVersionUID = 8264335866053098806L;
     private String id;
     private String name;
     private String pwd;

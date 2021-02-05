@@ -6,7 +6,7 @@ import com.wytest.springboot.util.RedisUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -25,7 +25,9 @@ public class UserController {
     RedisUtil redisUtil;
 
     @RequestMapping("qryUser")
-    public Object qryUser(String id){
+    public Object qryUser(@RequestBody User u){
+        logger.debug("user:{}",u.toString());
+        String id = u.getId();
         boolean hasKey = redisUtil.hasKey(id);
         User user = new User();
         if(hasKey){
@@ -43,7 +45,7 @@ public class UserController {
     }
 
     @RequestMapping("updUser")
-    public String updUser(User user){
+    public String updUser(@RequestBody User user){
         logger.debug("开始更新用户信息！");
         userMapper.updUser(user);
         redisUtil.set(user.getId(), user);
@@ -52,7 +54,8 @@ public class UserController {
     }
 
     @RequestMapping("delUser")
-    public String delUser(String id){
+    public String delUser(@RequestBody User u){
+        String id = u.getId();
         int i = userMapper.delUser(id);
         redisUtil.del(id);
         logger.debug("删除缓存");
@@ -60,10 +63,16 @@ public class UserController {
     }
 
     @RequestMapping("insertUser")
-    public String insertUser(User user){
+    public String insertUser(@RequestBody User user){
         userMapper.insertUser(user);
         redisUtil.set(user.getId(),user);
         logger.debug("新增成功！");
         return "新增成功";
+    }
+
+    @RequestMapping("qry")
+    public User qry(String id){
+        User user = userMapper.selectById(id);
+        return user;
     }
 }

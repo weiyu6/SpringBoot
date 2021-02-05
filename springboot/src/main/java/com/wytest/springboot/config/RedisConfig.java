@@ -1,4 +1,4 @@
-package com.wytest.springboot.redis;
+package com.wytest.springboot.config;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.PropertyAccessor;
