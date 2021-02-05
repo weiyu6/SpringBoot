@@ -75,4 +75,20 @@ public class UserController {
         User user = userMapper.selectById(id);
         return user;
     }
+
+    @RequestMapping("add")
+    public String add(@RequestBody User user) {
+        String id = user.getId();
+        userMapper.insertUser(user);
+
+        User user1 = userMapper.selectById(id);
+        logger.debug("查询结果：{}",user1.toString());
+        String name = null;
+        if(id.equals("20")){
+            if(name.equals("20")){
+                throw new RuntimeException("出错了") ;
+            }
+        }
+        return "成功！";
+    }
 }

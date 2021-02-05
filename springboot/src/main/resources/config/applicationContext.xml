@@ -11,4 +11,21 @@
        ">
     <import resource="classpath:/mybatis/datasource.xml"/>
 
+    <!--配置事物管理器-->
+    <bean id="txManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="datasource"/>
+        <property name="rollbackOnCommitFailure" value="true"/>
+    </bean>
+
+    <tx:advice id="txAdvice" transaction-manager="txManager">
+        <tx:attributes>
+            <tx:method name="*" propagation="REQUIRED"/>
+        </tx:attributes>
+    </tx:advice>
+
+    <aop:config>
+        <aop:pointcut id="aopPointcut" expression="execution(* com.wytest.springboot.controller.*.*(..))"/>
+        <aop:advisor advice-ref="txAdvice" pointcut-ref="aopPointcut"/>
+    </aop:config>
+
 </beans>
