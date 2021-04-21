@@ -2,6 +2,7 @@ package com.wytest.springboot.controller;
 
 import com.wytest.springboot.bean.User;
 import com.wytest.springboot.mapper.UserMapper;
+import com.wytest.springboot.service.UserService;
 import com.wytest.springboot.util.RedisUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,24 +24,13 @@ public class UserController {
     private UserMapper userMapper;
     @Autowired
     RedisUtil redisUtil;
+    @Autowired
+    UserService userService;
 
     @RequestMapping("qryUser")
     public Object qryUser(@RequestBody User u){
         logger.debug("user:{}",u.toString());
-        String id = u.getId();
-        boolean hasKey = redisUtil.hasKey(id);
-        User user = new User();
-        if(hasKey){
-            logger.debug("存在缓存");
-            user = (User) redisUtil.get(id);
-        }else {
-            logger.debug("缓存不存在！");
-            user =userMapper.selectById(id);
-            if(user == null){
-                return "无结果！";
-            }
-            redisUtil.set(id, user);
-        }
+        Object user = userService.qryUser(u);
         return user;
     }
 
@@ -78,17 +68,6 @@ public class UserController {
 
     @RequestMapping("add")
     public String add(@RequestBody User user) {
-        String id = user.getId();
-        userMapper.insertUser(user);
-
-        User user1 = userMapper.selectById(id);
-        logger.debug("查询结果：{}",user1.toString());
-        String name = null;
-        if(id.equals("20")){
-            if(name.equals("20")){
-                throw new RuntimeException("出错了") ;
-            }
-        }
-        return "成功！";
+        return userService.add(user);
     }
 }

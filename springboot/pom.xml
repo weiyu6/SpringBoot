@@ -44,6 +44,13 @@
             <version>2.1.4</version>
         </dependency>
 
+        <!--compile（默认选项）：表示为当前依赖参与项目的编译、测试和运行阶段，scope的默认选项。
+         test ：表示为当前依赖只参与测试阶段。
+         runtime ：表示为当前依赖只参与运行阶段，一般这种类库都是接口与实现相分离的类库，如mysql的驱动包。
+         privided ：表示为当前依赖在打包过程中，不需要打进去，需要由运行的环境来提供，比如tomcat或者基础类库，如a依赖于b和c，bc中都包含gson依赖（privided），则a中不会依赖bc中的gson，需由a自行引入gson依赖。
+         system ：表示为当前依赖不从maven仓库获取，从本地系统获取，结合systempath使用，常用于无法从maven仓库获取的包。
+         import ：表示为当前项目依赖为多继承关系，常用于项目中自定义父工程，需要注意的是只能用在dependencyManagement里面，且仅用于type=pom的dependency
+         -->
         <!--MySQL数据库依赖-->
         <dependency>
             <groupId>mysql</groupId>
